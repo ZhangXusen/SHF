@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.dao.RolePermissionDao">
+
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        select id, role_id, permission_id, create_time, update_time, is_deleted
+    </sql>
+
+    <select id="getById" resultType="RolePermission">
+        select
+        <include refid="columns"/>
+        from acl_role_permission
+        where
+        id = #{id}
+    </select>
+    <insert id="insertRoleIdAndPerId" useGeneratedKeys="true" keyProperty="id">
+        insert into acl_role_permission (role_id,
+                                         permission_id)
+        values (#{roleId},
+                #{permissionId})
+    </insert>
+    <update id="deleteByRoleId">
+        update acl_role_permission
+        set update_time = now(),
+            is_deleted  = 1
+        where role_id = #{id}
+    </update>
+    <update id="update">
+        update acl_role_permission
+        set role_id       = #{roleId},
+            permission_id = #{permissionId}
+        where id = #{id}
+
+    </update>
+
+    <select id="findPerIdsByRoleId" resultType="Long">
+        select permission_id
+        from acl_role_permission
+        where role_id = #{id}
+          and is_deleted = 0
+    </select>
+</mapper>

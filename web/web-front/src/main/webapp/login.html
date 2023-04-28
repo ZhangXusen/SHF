@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="Author" contect="http://www.webqin.net">
+    <title>尚好房</title>
+    <link rel="shortcut icon" href="/static/images/favicon.ico"/>
+    <link type="text/css" href="/static/css/css.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/js/js.js"></script>
+    <script src="/static/js/vue.js"></script>
+    <script src="/static/js/axios.js"></script>
+    <script src="/static/js/util.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //导航定位
+            $(".nav li:eq(6)").addClass("navCur");
+        })
+    </script>
+</head>
+
+<body>
+<div id="login">
+    <div class="header">
+        <div class="width1190">
+            <div class="fl">您好，欢迎来到尚好房！</div>
+            <div class="fr">
+                <a href="login.html">登录</a> |
+                <a href="register.html">注册</a> |
+                <a href="javascript:;">加入收藏</a> |
+                <a href="javascript:;">设为首页</a>
+            </div>
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div>
+    <div class="list-nav">
+        <div class="width1190">
+            <div class="list"><h3>房源分类</h3></div><!--list/-->
+            <ul class="nav">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="about.html">关于我们</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+                <div class="clears"></div>
+            </ul><!--nav/-->
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div><!--list-nav/-->
+    <div class="banner" style="background:url(/static/images/ban.jpg) center center no-repeat;"></div>
+
+    <div class="content">
+        <div class="width1190">
+            <div class="reg-logo">
+                <form id="signupForm" method="post" action="follow.html" class="zcform">
+                    <p class="clearfix">
+                        <label class="one" for="agent">用户名：</label>
+                        <input id="agent" v-model="loginVo.phone" type="text" class="required" value placeholder="请输入您的用户名"/>
+                    </p>
+                    <p class="clearfix">
+                        <span style="color: red;margin-left: 90px;">{{valid.phone}}</span>
+                    </p>
+                    <p class="clearfix">
+                        <label class="one" for="password">登录密码：</label>
+                        <input id="password" v-model="loginVo.password" type="password"
+                               class="{required:true,rangelength:[8,20],}" value placeholder="请输入密码"/>
+                    </p>
+                    <p class="clearfix">
+                        <span style="color: red;margin-left: 90px;">{{valid.password}}</span>
+                    </p>
+                    <!--<p class="clearfix agreement">
+                        <input type="checkbox" />
+                        <b class="left">已阅读并同意<a href="#">《用户协议》</a></b>
+                    </p>-->
+                    <p class="clearfix"><input class="submit" type="button" @click="submitLogin()" value="立即登录"/></p>
+                </form>
+                <div class="reg-logo-right">
+                    <h3>如果您没有账号，请</h3>
+                    <a href="register.html" class="logo-a">立即注册</a>
+                </div><!--reg-logo-right/-->
+                <div class="clears"></div>
+            </div><!--reg-logo/-->
+        </div><!--width1190/-->
+    </div><!--content/-->
+
+    <div class="footer">
+        <div class="width1190">
+            <div class="fl"><a href="index.html"><strong>尚好房</strong></a><a href="about.html">关于我们</a><a
+                    href="contact.html">联系我们</a><a href="follow.html">个人中心</a></div>
+            <div class="fr">
+                <dl>
+                    <dt><img src="/static/images/erweima.png" width="76" height="76"/></dt>
+                    <dd>微信扫一扫<br/>房价点评，精彩发布</dd>
+                </dl>
+                <dl>
+                    <dt><img src="/static/images/erweima.png" width="76" height="76"/></dt>
+                    <dd>微信扫一扫<br/>房价点评，精彩发布</dd>
+                </dl>
+                <div class="clears"></div>
+            </div>
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div><!--footer/-->
+    <div class="copy">Copyright@ 2020 尚好房 版权所有 沪ICP备1234567号-0&nbsp;&nbsp;&nbsp;&nbsp;技术支持：XXX</div>
+    <div class="bg100"></div>
+</div>
+<script>
+    var app =new Vue({
+        el: '#login',
+
+        data: {
+            loginVo: {
+                phone: '15099999999',
+                password: '111111'
+            },
+            valid: {
+                phone: '',
+                password: ''
+            },
+        },
+
+        mounted () {
+            debugger
+            //this.init()
+        },
+
+        methods: {
+            submitLogin() {
+                var isValid = true
+                if(this.loginVo.phone == '') {
+                    this.valid.password = '用户名必须输入';
+                    isValid = false
+                }
+                if(this.loginVo.password == '') {
+                    this.valid.password = '密码必须输入';
+                    isValid = false
+                }
+                if(!isValid) {
+                    return
+                }
+                var that = this
+                axios.post('/userInfo/login', this.loginVo).then(function (response) {
+                    if(response.data.code == 200){
+                        window.localStorage.setItem("userInfo", JSON.stringify(response.data.data))
+
+                        //原页面，哪个页面跳转过来的
+                        var originUrl = util.getOriginUrl()
+                        if(originUrl != '') {
+                            window.location.href = originUrl
+                        } else {
+                            window.location.href = "index.html"
+                        }
+                    }else{
+                        alert(response.data.message);
+                    }
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>

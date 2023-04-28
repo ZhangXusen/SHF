@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:include="common/head :: head"></head>
+<body class="gray-bg">
+<form id="ec" th:action="@{/role}" method="post">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <table class="table form-table margin-bottom10">
+                            <tr>
+                                <td>
+                                    <input type="text" name="roleName"
+                                           th:value="${#maps.containsKey(filters, 'roleName')} ? ${filters.roleName} : ''"
+                                           placeholder="角色名称" class="input-sm form-control"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+                            <button type="button" class="btn btn-sm btn-primary"
+                                    onclick="javascript:document.forms.ec.pageNum.value=1;document.forms.ec.submit();">
+                                搜索
+                            </button>
+                            <button type="button" class="btn btn-sm btn-primary create"
+                                    sec:authorize="hasAuthority('role.create')">新增
+                            </button>
+                            <button type="button" id="loading-example-btn"
+                                    onclick="javascript:window.location.reload();" class="btn btn-white btn-sm">刷新
+                            </button>
+                        </div>
+                        <table class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>角色名称</th>
+                                <th>角色编码</th>
+                                <th>描述</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="gradeX" th:each="item,it : ${page.list}">
+                                <td class="text-center" th:text="${it.count}">11</td>
+                                <td th:text="${item.roleName}">22</td>
+                                <td th:text="${item.roleCode}">33</td>
+                                <td th:text="${item.description}">33</td>
+                                <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}">33</td>
+                                <td class="text-center">
+                                    <a class="edit" th:attr="data-id=${item.id}">修改</a>
+                                    <a class="delete" th:attr="data-id=${item.id}">删除</a>
+                                    <a class="assgin" th:attr="data-id=${item.id}">分配权限</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row" th:include="common/pagination :: pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script th:inline="javascript">
+    $(function () {
+        //去添加角色的页面
+        $(".create").on("click", function () {
+            opt.openWin("/role/create", "新增", 580, 430);
+        });
+        //去修改角色的页面
+        $(".edit").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.openWin('/role/edit/' + id, '修改', 580, 430);
+        });
+        //删除角色
+        $(".delete").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.confirm('/role/delete/' + id);
+        });
+        $(".assgin").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.openWin("/role/assignShow/" + id, '修改', 580, 430);
+        });
+    });
+</script>
+</body>
+</html>

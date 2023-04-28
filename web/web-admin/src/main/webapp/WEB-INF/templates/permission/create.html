@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head :: head"></head>
+<script type="text/javascript">
+  $(function(){
+    $('#ec').validate({
+      rules:{
+        name:"required"
+      },
+      messages:{
+        name:"权限名称必须输入"
+      },
+      submitHandler: function(form) {
+        $(form).find(":submit").attr("disabled", true).text("正在提交...");
+        form.submit();
+      }
+    });
+  });
+</script>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox float-e-margins">
+    <div class="ibox-content" style="width: 98%;">
+      <form id="ec" th:action="@{/permission/save}" method="post" class="form-horizontal">
+        <input type="hidden" name="parentId" th:value="${permission.parentId}"/>
+        <input type="hidden" name="type" th:value="${permission.type}"/>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">上级权限：</label>
+          <div class="col-sm-10">
+            <input type="text" name="parentName" id="parentName" th:value="${permission.parentName}" disabled="disabled" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">权限名称：</label>
+          <div class="col-sm-10">
+            <input type="text" name="name" id="name" value="" class="form-control"/>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group" th:if="${permission.type == 1}">
+          <label class="col-sm-2 control-label">菜单url：</label>
+          <div class="col-sm-10">
+            <input type="text" name="url" id="url" class="form-control" style="width:100%;height: 50px;" ></input>
+          </div>
+        </div>
+        <div class="hr-line-dashed" th:if="${permission.type == 1}"></div>
+        <div class="form-group" th:if="${permission.type == 2}">
+          <label class="col-sm-2 control-label">权限值：</label>
+          <div class="col-sm-10">
+            <input type="text" name="code" id="code" class="form-control" style="width:100%;height: 50px;" ></input>
+          </div>
+        </div>
+        <div class="hr-line-dashed" th:if="${permission.type == 2}"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">排序：</label>
+          <div class="col-sm-10">
+            <input type="text" name="sort" id="sort" value="1" class="form-control"/>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group posf">
+          <div class="col-sm-4 col-sm-offset-2 text-right">
+            <button class="btn btn-primary" type="submit">确定</button>
+            <button class="btn btn-white" type="button" onclick="javascript:opt.closeWin();" value="取消">取消</button></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

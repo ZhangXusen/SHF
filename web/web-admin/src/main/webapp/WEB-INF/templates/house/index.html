@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:include="common/head :: head"></head>
+
+<body class="gray-bg">
+<form id="ec" th:action="@{/house}" method="post">
+    <div class="wrapper wrapper-content animated fadeInRight">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <table class="table form-table margin-bottom10">
+                            <tr>
+                                <td>
+                                    <input type="text" name="name"
+                                           th:value="${#maps.containsKey(filters, 'name')} ? ${filters.name} : ''"
+                                           placeholder="房源名称" class="input-sm form-control"/>
+                                </td>
+                                <td>
+                                    <select name="communityId" id="communityId" class="form-control">
+                                        <option value="">-请选择小区-</option>
+                                        <option th:each="item,it : ${communityList}" th:text="${item.name}"
+                                                th:value="${item.id}"
+                                                th:selected="${#maps.containsKey(filters, 'communityId')} ? ${item.id} eq ${filters.communityId} : false">
+                                            -选择小区-
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="houseTypeId" id="houseTypeId" class="form-control">
+                                        <option value="">-请选择户型-</option>
+                                        <option th:each="item,it : ${houseTypeList}" th:text="${item.name}"
+                                                th:value="${item.id}"
+                                                th:selected="${#maps.containsKey(filters, 'houseTypeId')} ? ${item.id} eq ${filters.houseTypeId} : false">
+                                            -请选择-
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select name="floorId" id="floorId" class="form-control">
+                                        <option value="">-请选择楼层-</option>
+                                        <option th:each="item,it : ${floorList}" th:text="${item.name}"
+                                                th:value="${item.id}"
+                                                th:selected="${#maps.containsKey(filters, 'floorId')} ? ${item.id} eq ${filters.floorId} : false">
+                                            -请选择-
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="buildStructureId" id="buildStructureId" class="form-control">
+                                        <option value="">-请选择建筑结构-</option>
+                                        <option th:each="item,it : ${buildStructureList}" th:text="${item.name}"
+                                                th:value="${item.id}"
+                                                th:selected="${#maps.containsKey(filters, 'buildStructureId')} ? ${item.id} eq ${filters.buildStructureId} : false">
+                                            -请选择-
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="directionId" id="directionId" class="form-control">
+                                        <option value="">-请朝向-</option>
+                                        <option th:each="item,it : ${directionList}" th:text="${item.name}"
+                                                th:value="${item.id}"
+                                                th:selected="${#maps.containsKey(filters, 'directionId')} ? ${item.id} eq ${filters.directionId} : false">
+                                            -请选择-
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select name="decorationId" id="decorationId" class="form-control">
+                                        <option value="">-请选择装修情况-</option>
+                                        <option th:each="item,it : ${decorationList}" th:text="${item.name}"
+                                                th:value="${item.id}"
+                                                th:selected="${#maps.containsKey(filters, 'decorationId')} ? ${item.id} eq ${filters.decorationId} : false">
+                                            -请选择-
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="houseUseId" id="houseUseId" class="form-control">
+                                        <option value="">-请选择房屋用途-</option>
+                                        <option th:each="item,it : ${houseUseList}" th:text="${item.name}"
+                                                th:value="${item.id}"
+                                                th:selected="${#maps.containsKey(filters, 'houseUseId')} ? ${item.id} eq ${filters.houseUseId} : false">
+                                            -请选择-
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+                            <button type="submit" class="btn btn-sm btn-primary"> 搜索</button>
+                            <button type="button" class="btn btn-sm btn-primary create"> 新增</button>
+                            <button type="button" id="loading-example-btn"
+                                    onclick="javascript:window.location.reload();" class="btn btn-white btn-sm">刷新
+                            </button>
+
+                        </div>
+                        <table class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>房源名称</th>
+                                <th>总价：万元</th>
+                                <th>单价：元/平米</th>
+                                <th>建筑面积</th>
+                                <th>套内面积</th>
+                                <th>挂牌日期</th>
+                                <th>上次交易日期</th>
+                                <th>状态</th>
+                                <th width="160">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="gradeX" th:each="item,it: ${page.list}">
+                                <td class="text-center" th:text="${it.count}">11</td>
+                                <td th:text="${item.name}">22</td>
+                                <td th:text="${item.totalPrice}">22</td>
+                                <td th:text="${item.unitPrice}">22</td>
+                                <td th:text="${item.buildArea}">22</td>
+                                <td th:text="${item.insideArea}">22</td>
+                                <td th:text="${item.listingDateString}">22</td>
+                                <td th:text="${item.lastTradeDateString}">22</td>
+                                <td th:text="${item.status == 1 ? '已发布' : '未发布'}">22</td>
+                                <td class="text-center">
+                                    <a class="publish" th:if="${item.status} eq '0'"
+                                       th:attr="data-id=${item.id},data-status=1">发布</a>
+                                    <a class="publish" th:if="${item.status} eq '1'"
+                                       th:attr="data-id=${item.id},data-status=0">取消发布</a>
+                                    <a class="edit" th:attr="data-id=${item.id}">修改</a>
+                                    <a class="delete" th:attr="data-id=${item.id}">删除</a>
+                                    <a class="detail" th:attr="data-id=${item.id}"
+                                       sec:authorize="hasAuthority('house.show')">详情</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row" th:include="common/pagination :: pagination"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script th:inline="javascript">
+    $(function () {
+        $(".create").on("click", function () {
+            opt.openWin('/house/create', '新增', 630, 430)
+        });
+        $(".edit").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.openWin('/house/edit/' + id, '修改', 630, 430);
+        });
+        $(".delete").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.confirm('/house/delete/' + id);
+        });
+        $(".publish").on("click", function () {
+            var id = $(this).attr("data-id");
+            var status = $(this).attr("data-status");
+            opt.confirm("/house/publish/" + id + "/" + status, "确定该操作吗？");
+        });
+        $(".detail").on("click", function () {
+            var id = $(this).attr("data-id");
+            window.location = "/house/" + id;
+        });
+    });
+</script>
+</body>
+</html>

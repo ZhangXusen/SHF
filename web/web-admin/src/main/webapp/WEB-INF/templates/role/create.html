@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head :: head"></head>
+<script type="text/javascript">
+    $(function(){
+        $('#ec').validate({
+            rules:{
+                roleName:"required",
+                description:"required"
+            },
+            messages:{
+                roleName:"角色必须输入",
+                description:"描述必须输入"
+            },
+            submitHandler: function(form) {
+                $(form).find(":submit").attr("disabled", true).text("正在提交...");
+                form.submit();
+            }
+        });
+    });
+</script>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content" style="width: 98%;">
+            <form id="ec" th:action="@{/role/save}" method="post" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">角色名称：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="roleName" id="roleName" value="" class="form-control"/>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">角色编码：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="roleCode" id="roleCode" value="" class="form-control"/>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">描述：</label>
+                    <div class="col-sm-10">
+                        <textarea name="description" id="description" class="form-control" style="width:100%;height: 50px;" ></textarea>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group posf">
+                    <div class="col-sm-4 col-sm-offset-2 text-right">
+                        <button class="btn btn-primary" type="submit">确定</button>
+                        <button class="btn btn-white" type="button" value="取消">取消</button></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:include="common/head :: head"></head>
+
+<body class="gray-bg">
+<form id="ec" th:action="@{/community}" method="post">
+    <div class="wrapper wrapper-content animated fadeInRight">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <table class="table form-table margin-bottom10">
+                            <tr>
+                                <td>
+                                    <input type="text" name="name"
+                                           th:value="${#maps.containsKey(filters, 'name')} ? ${filters.name} : ''"
+                                           placeholder="小区名称" class="input-sm form-control"/>
+                                </td>
+                                <td>
+                                    <select name="areaId" id="areaId" class="form-control">
+                                        <option value="">-请选择区域-</option>
+                                        <option th:each="item,it : ${areaList}" th:text="${item.name}"
+                                                th:value="${item.id}"
+                                                th:selected="${#maps.containsKey(filters, 'areaId')} ? ${item.id } eq  ${filters.areaId } : false">
+                                            -选择区域-
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="plateId" id="plateId" class="form-control">
+                                        <option value="">-请选择-</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+                            <button type="submit" class="btn btn-sm btn-primary"> 搜索</button>
+                            <button type="button" class="btn btn-sm btn-primary create"
+                                    sec:authorize="hasAuthority('community.create')"> 新增
+                            </button>
+                            <button type="button" id="loading-example-btn"
+                                    onclick="javascript:window.location.reload();" class="btn btn-white btn-sm">刷新
+                            </button>
+                        </div>
+                        <table class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>小区名称</th>
+                                <th>区域</th>
+                                <th>板块</th>
+                                <th>详细地址</th>
+                                <th>建筑年代</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="gradeX" th:each="item,it: ${page.list}">
+                                <td class="text-center" th:text="${it.count}">11</td>
+                                <td th:text="${item.name}">22</td>
+                                <td th:text="${item.areaName}">33</td>
+                                <td th:text="${item.plateName}">22</td>
+                                <td th:text="${item.address}">22</td>
+                                <td th:text="${item.buildYears}">22</td>
+                                <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}">33</td>
+                                <td class="text-center">
+                                    <a class="edit" th:attr="data-id=${item.id}"
+                                       sec:authorize="hasAuthority('community.edit')">修改</a>
+                                    <a class="delete" th:attr="data-id=${item.id}"
+                                       sec:authorize="hasAuthority('community.delete')">删除</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row" th:include="common/pagination :: pagination"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script th:inline="javascript">
+    $(function () {
+        $(".create").on("click", function () {
+            opt.openWin('/community/create', '新增', 630, 430)
+        });
+        $(".edit").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.openWin('/community/edit/' + id, '修改', 580, 430);
+        });
+        $(".delete").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.confirm('/community/delete/' + id);
+        });
+
+        $("#areaId").bind("change", function () {
+            var areaId = $("#areaId").val();
+            if (areaId == '') return
+            $("#plateId").empty();
+            $.get("/dict/findListByParentId/" + areaId, function (response) {
+                $("<option value=''>-请选择板块-</option>").appendTo("#plateId");
+                var res = JSON.parse(response)
+                $.each(res.data, function (i, item) {
+                    var plateId = [[${#maps.containsKey(filters, 'plateId')} ? ${filters.plateId} : '']];
+                    if (item.id == plateId) {
+                        $("<option></option>").val(item.id).text(item.name).attr('selected', 'true').appendTo("#plateId");
+                    } else {
+                        $("<option></option>").val(item.id).text(item.name).appendTo("#plateId");
+                    }
+                });
+            });
+        });
+        // 触发 select 元素的 change 事件：
+        $("#areaId").trigger("change");
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.dao.UserFollowDao">
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        select id, user_id, house_id, create_time, update_time, is_deleted
+    </sql>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into user_follow (user_id,
+                                 house_id)
+        values (#{userId},
+                #{houseId})
+    </insert>
+
+    <update id="update">
+        update user_follow set
+        <if test="userId != null and userId != ''">
+            user_id = #{userId} ,
+        </if>
+        <if test="houseId != null and houseId != ''">
+            house_id = #{houseId} ,
+        </if>
+        update_time = now()
+        where
+        id = #{id}
+    </update>
+
+    <update id="delete">
+        update user_follow
+        set update_time = now(),
+            is_deleted  = 1
+        where id = #{id}
+    </update>
+
+    <select id="getById" resultType="UserFollow">
+        <include refid="columns"/>
+        from user_follow
+        where
+        id = #{id}
+    </select>
+
+    <select id="getCountByUserId" resultType="integer">
+        select count(id)
+        from user_follow
+        where user_id = #{id}
+          and house_id = #{houseId}
+          and is_deleted = 0
+    </select>
+
+    <select id="findPageList" resultType="com.atguigu.vo.UserFollowVo">
+        select
+        flw.id,
+        flw.house_id as houseId,
+        flw.create_time as createTime,
+
+        hse.name,
+        hse.build_area as buildArea,
+        hse.total_price as totalPrice,
+        hse.house_type_id as houseTypeId,
+        hse.floor_id as floorId,
+        hse.direction_id as directionId,
+        hse.default_image_url as defaultImageUrl,
+
+        cmty.name as communityName
+        from user_follow flw
+        left join hse_house hse on hse.id = flw.house_id
+        left join hse_community cmty on cmty.id = hse.community_id
+        <where>
+            user_id = #{userId}
+            and flw.is_deleted = 0
+            and hse.is_deleted = 0
+            and cmty.is_deleted = 0
+        </where>
+        order by flw.id desc
+    </select>
+</mapper>

@@ -1,0 +1,423 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="Author" contect="http://www.webqin.net">
+  <title>尚好房</title>
+  <link rel="shortcut icon" href="./static/images/favicon.ico"/>
+  <link type="text/css" href="./static/css/css.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="./static/css/swiper-bundle.min.css">
+  <script type="text/javascript" src="./static/js/jquery.js"></script>
+  <script type="text/javascript" src="./static/js/js.js"></script>
+  <script src="./static/js/vue.js"></script>
+  <script src="./static/js/axios.js"></script>
+  <script src="./static/js/request.js"></script>
+  <script src="./static/js/util.js"></script>
+
+  <script src="./static/js/swiper-bundle.min.js"></script>
+  <style>
+    .swiper{width:100%;height:100%}.swiper{width:100%;height:300px;margin-left:auto;margin-right:auto}.swiper-slide{background-size:cover;background-position:center}.mySwiper2{height:80%;width:100%}.mySwiper{height:20%;box-sizing:border-box;padding:10px 0}.mySwiper .swiper-slide{width:25%;height:100%;opacity:.4}.mySwiper .swiper-slide-thumb-active{opacity:1}.swiper-slide img{display:block;width:100%;height:100%;object-fit:cover}
+  </style>
+  <script type="text/javascript">
+    $(function () {
+      //导航定位
+      $(".nav li:eq(0)").addClass("navCur");
+    })
+  </script>
+</head>
+
+<body>
+<div id="item">
+  <div class="header">
+    <div class="width1190">
+      <div class="fl">您好，欢迎来到尚好房！</div>
+      <div class="fr">
+        <a href="login.html">登录</a> |
+        <a href="register.html">注册</a> |
+        <a href="javascript:;">加入收藏</a> |
+        <a href="javascript:;">设为首页</a>
+      </div>
+      <div class="clears"></div>
+    </div><!--width1190/-->
+  </div>
+  <div class="list-nav">
+    <div class="width1190">
+      <div class="list"><h3>房源分类</h3></div><!--list/-->
+      <ul class="nav">
+        <li><a href="index.html">首页</a></li>
+        <li><a href="about.html">关于我们</a></li>
+        <li><a href="contact.html">联系我们</a></li>
+        <div class="clears"></div>
+      </ul><!--nav/-->
+      <div class="clears"></div>
+    </div><!--width1190/-->
+  </div><!--list-nav/-->
+  <div class="banner" style="background:url(/static/images/ban.jpg) center center no-repeat;"></div>
+
+  <div class="content">
+    <div class="width1190" style="width:1000px;">
+      <div class="proImg fl">
+        <!--<img src="/static/images/fangt1.jpg"/>-->
+
+        <div style="--swiper-navigation-color: #F2F2F2; --swiper-pagination-color: #F2F2F2" class="swiper mySwiper2">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="item in houseImage1List" :key="item.id" >
+              <img :src="item.imageUrl" />
+            </div>
+          </div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+        </div>
+        <div thumbsSlider="" class="swiper mySwiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="item in houseImage1List" :key="item.id">
+              <img :src="item.imageUrl"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--proImg/-->
+      <div class="proText fr">
+        <h3 class="proTitle">
+          {{ house.name }}
+          <span v-if="isFollow" style="margin-left: 50px; font-size: 14px;"><a href="###">已关注</a></span>
+          <span v-else style="margin-left: 50px; font-size: 14px;"><a href="###" @click="follow()">关注</a></span>
+        </h3>
+        <div class="proText1">
+          <div class="proText1-detail-pri">
+            <strong>{{ house.houseTypeName }}</strong>
+            <em>{{ community.buildYears }}/{{ house.floorName }}</em>
+          </div>
+          <div class="proText1-detail-pri">
+            <strong>{{ house.directionName }}</strong>
+            <em>{{ house.decorationName }}/{{ house.buildStructureName }}</em>
+          </div>
+          <div class="proText1-detail-pri">
+            <strong>{{ house.totalPrice }}万元</strong>
+            <em>{{ house.unitPrice }}元/平/{{ house.buildArea }}平方米</em>
+          </div>
+          <ul class="proText1-detail-oth clears">
+            <li>
+              <span>小区名称：</span><a href="#">{{ community.name }}</a>
+            </li>
+            <li>
+              <span>所在区域：</span><a href="#">{{ community.areaName }}</a><a href="#">{{ community.plateName }}</a>
+            </li>
+            <li>
+              <span>房屋编号：</span>{{ house.id }}
+            </li>
+          </ul>
+          <div class="jingji">
+            <div class="jingji-pho">
+              <a href="#">
+                <img :src="houseBroker.brokerHeadUrl" alt="">
+              </a>
+            </div>
+            <div class="jingji-deta">
+              <a href="javascript:;" class="projrgwc">{{ houseBroker.brokerName }}</a>
+              <span>本小区好评经纪人</span>
+            </div>
+            <a href="javascript:;" class="jingji-tel">4008758119 <span>转</span>35790</a>
+          </div>
+        </div>
+      </div><!--proText/-->
+      <div class="clears"></div>
+    </div>
+  </div><!--width1190/-->
+  <div class="proBox" style="width:1000px;margin:10px auto;">
+    <div class="proEq">
+      <!--选项卡菜单-->
+      <ul class="fl">
+        <li class="proEqCur">房源信息</li>
+        <li>房源特色</li>
+        <li>户型分间</li>
+        <li>经纪人反馈</li>
+      </ul>
+      <div class="clears"></div>
+    </div><!--proEq/-->
+    <!--每一个选项卡-->
+    <div class="proList">
+      <dl class="proList-con clearf">
+        <dt>基本属性</dt>
+        <dl>
+          <dd><span>房屋户型</span>{{ house.houseTypeName }}</dd>
+          <dd><span>所在楼层</span>{{ house.floorName }}</dd>
+          <dd><span>建筑面积</span>{{ house.buildArea }}平方米</dd>
+          <dd><span>建筑结构</span>{{ house.buildStructureName }}</dd>
+          <dd><span>套内面积</span>{{ house.insideArea }}平方米</dd>
+          <dd><span>房屋朝向</span>{{ house.directionName }}</dd>
+          <dd><span>装修情况</span>{{ house.decorationName }}</dd>
+          <dd><span>梯户比例</span>{{ house.elevatorRatio }}</dd>
+        </dl>
+      </dl>
+      <dl class="proList-con clearf">
+        <dt>交易性质</dt>
+        <dl>
+          <dd><span>挂牌时间</span>{{ house.listingDateString }}</dd>
+          <dd><span>交易权属</span>商品房</dd>
+          <dd><span>上次交易</span>{{ house.lastTradeDateString }}</dd>
+          <dd><span>房屋用途</span>{{ house.houseUseName }}</dd>
+          <dd><span>房屋年限</span>满五年</dd>
+          <dd><span>产权所属</span>共有</dd>
+          <dd><span>抵押信息</span>有抵押 19万元 中国银行四川分行 业主自还</dd>
+          <dd><span>房本备件</span>已上传房本照片</dd>
+        </dl>
+      </dl>
+      <div class="proList-con-war">
+        特别提示：本房源所示信息仅供参考，购房时以改房屋档案登记信息、产权证信息以及所签订合同条款约定为准；本房源公示信息不作为合同条款，不具有合同约束力。
+      </div>
+      <img :src="item.imageUrl" v-for="item in houseImage1List" :key="item.id" style="width: 430px;height: 290px;"/>
+    </div><!--proList/-->
+    <!--每一个选项卡-->
+    <div class="proList">
+      <dl class="proList-con clearf">
+        <dt>房源特色</dt>
+        <dd>
+          <a href="#" class="proList-con-icon">满五年</a>
+          <a href="#" class="proList-con-icon">随时看房</a>
+          <a href="#" class="proList-con-icon">VR看房</a>
+        </dd>
+      </dl>
+      <dl class="proList-con clearf">
+        <dt>小区介绍</dt>
+        <dd>
+          中国央企电建开发的，实力雄厚，品质保证。小区保安24小时巡逻，大门和楼栋均设有门禁，居住安全有保障。小区实行人车分流，配套健身设施齐全，老人和孩子可以安心享受居住环境。小区物业为开发商自己物业人员
+        </dd>
+      </dl>
+      <dl class="proList-con clearf">
+        <dt>核心卖点</dt>
+        <dd>
+          本房满五年，卧室带有阳台，对小区中庭，采光好户型方正
+        </dd>
+      </dl>
+      <dl class="proList-con clearf">
+        <dt>周边配套</dt>
+        <dd>
+          小区门口有多家商场，特色小吃众多，满足您绝大多数需求。1公里左右的师大现代广场休闲娱乐设施众多，充分满足您的娱乐选择。200米外即是金茶路菜市，居家买菜方便快捷。小区对门即是市政公园，在晚饭之余可以和家人朋友一期散步休憩，享受休闲。
+
+        </dd>
+      </dl>
+      <dl class="proList-con clearf">
+        <dt>交通出行</dt>
+        <dd>
+          距离大面铺地铁站3.5公里（来源于百度地图）。川师成龙校区西门公交车站距离小区306米（来源于百度地图），有856路、898路。龙安村招呼站距离小区200米（来源于百度地图），有332路，313路。交通线路多，直达地铁站口，出行便捷
+        </dd>
+      </dl>
+      <div class="proList-con-war">
+        注：1.房源介绍中的周边配套、在建设施、规划设施、地铁信息、绿化率、得房率、容积率等信息为通过物业介绍、房产证、实勘、政府官网等渠道获取，因时间、政策会发生变化，与实际情况可能略有偏差，房源介绍仅供参考。
+        2.房源介绍中与距离相关的数据均来源于百度地图。 3.土地使用起止年限详见业主土地证明材料或查询相关政府部门的登记文件。
+      </div>
+    </div><!--proList/-->
+    <!--每一个选项卡-->
+    <div class="proList">
+      <div class="proList-fm">
+        <img src="/static/images/standard_f1ba9c2f-a917-421d-ad0f-2a6048a0d0d7.jfif" alt="">
+      </div>
+      <div class="proList-fd">
+        <table>
+          <tr>
+            <td>房间名</td>
+            <td>平方</td>
+            <td>朝向</td>
+            <td>窗户</td>
+          </tr>
+          <tr>
+            <td>客厅</td>
+            <td>29.76平方米</td>
+            <td>无</td>
+            <td>未知窗户类型</td>
+          </tr>
+          <tr>
+            <td>卧室A</td>
+            <td>10平方米</td>
+            <td>无</td>
+            <td>未知窗户类型</td>
+          </tr>
+          <tr>
+            <td>卧室B</td>
+            <td>13.06平方米</td>
+            <td>北</td>
+            <td>普通窗</td>
+          </tr>
+          <tr>
+            <td>卧室C</td>
+            <td>7.72平方米</td>
+            <td>西</td>
+            <td>落地窗</td>
+          </tr>
+          <tr>
+            <td>厨房</td>
+            <td>5.45平方米</td>
+            <td>北</td>
+            <td>普通窗</td>
+          </tr>
+          <tr>
+            <td>卫生间</td>
+            <td>4.38平方米</td>
+            <td>南</td>
+            <td>普通窗</td>
+          </tr>
+          <tr>
+            <td>阳台A</td>
+            <td>2.57平方米</td>
+            <td>北</td>
+            <td>普通窗</td>
+          </tr>
+          <tr>
+            <td>阳台B</td>
+            <td>4.81平方米</td>
+            <td>北 东</td>
+            <td>普通窗</td>
+          </tr>
+        </table>
+      </div>
+      <div class="clears"></div>
+    </div><!--proList/-->
+    <!--每一个选项卡-->
+    <div class="proList">
+      <dl class="proList-jingjiL clearf">
+        <dt>
+          <img src="/static/images/d61bd0db-9b94-4199-85e1-8360606f9c99.jpg.480x640.jpg.55x55.jpg" alt="">
+        </dt>
+        <dd>
+          <div>
+            <a href="#">王琢</a>
+            <span>4008897069转34851</span>
+          </div>
+          <p>
+            房屋所在楼盘电建地产云立方，我带看过此房，了解房屋相关信息。房屋三梯八户，，产权面积88平米，装修三房，卧室有阳台周边配套齐全，生活、出行便利。更多详情，欢迎来电咨询。竭诚为您服务，只为您找到满意的家！
+          </p>
+          <div>
+            2022/01/13 带客户看过此房，共带看本房3次
+          </div>
+        </dd>
+      </dl>
+      <dl class="proList-jingjiL clearf">
+        <dt>
+          <img src="/static/images/adb503d4-3b05-4574-a61a-e5efbd39ec47.png.480x640.jpg.55x55.jpg" alt="">
+        </dt>
+        <dd>
+          <div>
+            <a href="#">文辉</a>
+            <span>4008896851转37783</span>
+          </div>
+          <p>
+            云立方套三单卫，低楼层，简单装修，对小区中庭，客厅带飘窗，主卧室带阳台，户型方正，有钥匙，可以实地看房。
+          </p>
+          <div>
+            2022/01/01 带客户看过此房，共带看本房1次
+          </div>
+        </dd>
+      </dl>
+      <dl class="proList-jingjiL clearf">
+        <dt>
+          <img src="/static/images/832c9fdc-e770-416d-8ae4-cc17e294049e.jpg.480x640.jpg.55x55.jpg" alt="">
+        </dt>
+        <dd>
+          <div>
+            <a href="#">常新文</a>
+            <span>4008897038转86910</span>
+          </div>
+          <p>
+            本房满五年，卧室带有阳台，对小区中庭，采光好户型方正
+          </p>
+          <div>
+            2021/12/26 带客户看过此房，共带看本房1次
+          </div>
+        </dd>
+      </dl>
+    </div><!--proList/-->
+  </div><!--proBox/-->
+
+  <div class="footer">
+    <div class="width1190">
+      <div class="fl"><a href="index.html"><strong>尚好房</strong></a><a href="about.html">关于我们</a><a
+              href="contact.html">联系我们</a><a href="follow.html">个人中心</a></div>
+      <div class="fr">
+        <dl>
+          <dt><img src="/static/images/erweima.png" width="76" height="76"/></dt>
+          <dd>微信扫一扫<br/>房价点评，精彩发布</dd>
+        </dl>
+        <dl>
+          <dt><img src="/static/images/erweima.png" width="76" height="76"/></dt>
+          <dd>微信扫一扫<br/>房价点评，精彩发布</dd>
+        </dl>
+        <div class="clears"></div>
+      </div>
+      <div class="clears"></div>
+    </div><!--width1190/-->
+  </div><!--footer/-->
+  <div class="copy">Copyright@ 2020 尚好房 版权所有 沪ICP备1234567号-0&nbsp;&nbsp;&nbsp;&nbsp;技术支持：XXX</div>
+  <div class="bg100"></div>
+</div>
+<script>
+  new Vue({
+    el: '#item',
+
+    data: {
+      id: null,
+      house: {},
+      community: {},
+      houseBroker: {},
+      houseImage1List: [],
+      isFollow: false,
+
+      isLoad: false
+    },
+
+    created() {
+      this.init()
+    },
+
+    mounted () {
+      const timer = setInterval(() => {
+        // 图片加载成功，再去初始化轮播图
+        if(this.isLoad) {
+          this.runSwiper()
+          clearInterval(timer);
+        }
+      }, 500);
+    },
+
+    methods: {
+      runSwiper() {
+        var swiper = new Swiper(".mySwiper", {
+          spaceBetween: 10,
+          slidesPerView: 4,
+          freeMode: true,
+          watchSlidesProgress: true
+        })
+        new Swiper(".mySwiper2", {
+          spaceBetween: 10,
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+          },
+          thumbs: {
+            swiper: swiper
+          }
+        })
+      },
+
+      init() {
+        this.id = util.getQueryVariable("id")
+        this.fetchData()
+      },
+
+      fetchData() {
+        var that = this
+        axios.get('/house/info/'+this.id).then(function (response) {
+          that.house = response.data.data.house
+          that.community = response.data.data.community
+          that.houseBroker = response.data.data.houseBrokerList[0]
+          that.houseImage1List = response.data.data.houseImage1List
+          that.isFollow = response.data.data.isFollow
+          that.isLoad = true
+        });
+      }
+    }
+  })
+</script>
+</body>
+</html>

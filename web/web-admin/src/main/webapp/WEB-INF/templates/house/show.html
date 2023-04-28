@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:include="common/head :: head"></head>
+<body class="gray-bg">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="wrapper wrapper-content animated fadeInUp">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="m-b-md">
+                                <a th:href="@{/house/{id}(id=${house.id})}"
+                                   class="btn btn-white btn-xs pull-right">刷新</a>
+                                <a href="/house" class="btn btn-white btn-xs pull-right">返回</a>
+                                <h2 th:text="${house.name}">金色城市</h2>
+                            </div>
+                            <dl class="dl-horizontal">
+                                <dt>状态：</dt>
+                                <dd><span class="label label-primary"
+                                          th:text="${house.status == 1 ? '已发布' : '未发布'}">进行中</span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <dl class="dl-horizontal">
+                                <dt>总价：</dt>
+                                <dd th:text="${house.totalPrice} + '万元'"></dd>
+                                <dt>单位价格：</dt>
+                                <dd th:text="${house.unitPrice} + '元/平米'"></dd>
+                                <dt>建筑面积：</dt>
+                                <dd th:text="${house.buildArea} + '平米'"></dd>
+                                <dt>套内面积：</dt>
+                                <dd th:text="${house.insideArea} + '平米'"></dd>
+                                <dt>房屋户型：</dt>
+                                <dd th:text="${house.houseTypeName}"></dd>
+                                <dt>所在楼层：</dt>
+                                <dd th:text="${house.floorName}"></dd>
+                                <dt>建筑结构：</dt>
+                                <dd th:text="${house.buildStructureName}"></dd>
+                                <dt>房屋朝向：</dt>
+                                <dd th:text="${house.directionName}"></dd>
+                                <dt>装修情况：</dt>
+                                <dd th:text="${house.decorationName}"></dd>
+                                <dt>房屋用途：</dt>
+                                <dd th:text="${house.houseUseName}"></dd>
+                                <dt>梯户比例：</dt>
+                                <dd th:text="${house.elevatorRatio}"></dd>
+                                <dt>挂牌时间：</dt>
+                                <dd th:text="${house.listingDateString}"></dd>
+                                <dt>上次交易：</dt>
+                                <dd th:text="${house.lastTradeDateString}"></dd>
+                            </dl>
+                        </div>
+                        <div class="col-sm-7" id="cluster_info">
+                            <dl class="dl-horizontal">
+                                <dt>小区名称：</dt>
+                                <dd th:text="${community.name}"></dd>
+                                <dt>小区均价：</dt>
+                                <dd th:text="${community.averagePrice}+'元/平米'">已上传房本照片</dd>
+                                <dt>区域：</dt>
+                                <dd th:text="${community.areaName}">商品房</dd>
+                                <dt>板块：</dt>
+                                <dd th:text="${community.plateName}"></dd>
+                                <dt>详细地址：</dt>
+                                <dd th:text="${community.address}"></dd>
+                                <dt>建筑年代：</dt>
+                                <dd th:text="${community.buildYears}">满五年</dd>
+                                <dt>物业价格：</dt>
+                                <dd th:text="${community.propertyPrice}+'元/平米'">共有</dd>
+                                <dt>物业公司：</dt>
+                                <dd th:text="${community.propertyCompany}">有抵押 19万元 中国银行四川分行 业主自还</dd>
+                                <dt>开发商：</dt>
+                                <dd th:text="${community.developer}">已上传房本照片</dd>
+                                <dt>楼栋数：</dt>
+                                <dd th:text="${community.buildNum}">已上传房本照片</dd>
+                                <dt>房屋数：</dt>
+                                <dd th:text="${community.houseNum}">已上传房本照片</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h3>房源图片信息</h3>
+                                    <a class="btn btn-xs btn-primary" id="upload1">上传房源图片</a>
+                                </div>
+                                <div class="ibox-content">
+                                    <a th:each="item,it : ${houseImage1List}" class="fancybox">
+                                        <img alt="image" th:src="${item.imageUrl}"/>
+                                        <a th:attr="data-id=${item.id}" class="deleteImages">删除</a>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h3>房产图片信息</h3>
+                                    <a class="btn btn-xs btn-primary" id="upload2">上传房产图片</a>
+                                </div>
+                                <div class="ibox-content">
+                                    <a th:each="item,it : ${houseImage2List}" class="fancybox">
+                                        <img alt="image" th:src="${item.imageUrl}"/>
+                                        <a th:attr="data-id=${item.id}" class="deleteImages">删除</a>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="panel blank-panel">
+                            <div class="pull-left" style="margin-top: 10px;">
+                                <a class="btn btn-xs btn-white"><h3>经纪人信息</h3></a>
+                                <a class="btn btn-xs btn-primary createBroker"
+                                   sec:authorize="hasAuthority('house.editBroker')">添加</a>
+                            </div>
+                            <table class="table table-striped table-bordered table-hover dataTables-example">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>经纪人头像</th>
+                                    <th>经纪人姓名</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="gradeX" th:each="item,it : ${houseBrokerList}">
+                                    <td class="text-center" th:text="${it.count}">11</td>
+                                    <td>
+                                        <img th:src="${item.brokerHeadUrl}" style="width: 60px; height: 60px;">
+                                    </td>
+                                    <td th:text="${item.brokerName}">33</td>
+                                    <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}">33</td>
+                                    <td class="text-center">
+                                        <a class="editBroker" th:attr="data-id=${item.id}">修改</a>
+                                        <a class="deleteBroker" th:attr="data-id=${item.id}">删除</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="panel blank-panel">
+                            <div class="pull-left" style="margin-top: 10px;">
+                                <a class="btn btn-xs btn-white"><h3>房东信息</h3></a>
+                                <a class="btn btn-xs btn-primary createUser"
+                                   sec:authorize="hasAuthority('house.editUser')">添加</a>
+                            </div>
+                            <table class="table table-striped table-bordered table-hover dataTables-example">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>姓名</th>
+                                    <th>手机号</th>
+                                    <th>性别</th>
+                                    <th>身份证号码</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="gradeX" th:each="item,it : ${houseUserList}">
+                                    <td class="text-center" th:text="${it.count}">11</td>
+                                    <td th:text="${item.name}">33</td>
+                                    <td th:text="${item.phone}">33</td>
+                                    <td th:text="${item.sex == 1 ? '男' : '女'}">33</td>
+                                    <td th:text="${item.idNo}">33</td>
+                                    <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}">33</td>
+                                    <td class="text-center">
+                                        <a class="editUser" th:attr="data-id=${item.id}">修改</a>
+                                        <a class="deleteUser" th:attr="data-id=${item.id}">删除</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".createBroker").on("click", function () {
+            opt.openWin('/houseBroker/create?houseId=[[${house.id}]]', '新增经纪人', 630, 300)
+        });
+        $(".editBroker").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.openWin('/houseBroker/edit/' + id, '修改经纪人', 630, 300);
+        });
+        $(".deleteBroker").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.confirm('/houseBroker/delete/[[${house.id}]]/' + id);
+        });
+        $(".detail").on("click", function () {
+            var id = $(this).attr("data-id");
+            window.location = "/house/" + id;
+        });
+        $(".createUser").on("click", function () {
+            opt.openWin('/houseUser/create?houseId=[[${house.id}]]', '新增房东', 630, 430)
+        });
+        $(".editUser").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.openWin('/houseUser/edit/' + id, '修改房东', 630, 430);
+        });
+        $(".deleteUser").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.confirm('/houseUser/delete/[[${house.id}]]/' + id);
+        });
+        $("#upload1").on("click", function () {
+            opt.openWin('/houseImage/uploadShow/[[${house.id}]]/1', '上传房源图片', 580, 430);
+        });
+        $("#upload2").on("click", function () {
+            opt.openWin('/houseImage/uploadShow/[[${house.id}]]/2', '上传房产图片', 580, 430);
+        });
+        $(".deleteImages").on("click", function () {
+            var id = $(this).attr("data-id");
+            opt.confirm('/houseImage/delete/[[${house.id}]]/' + id);
+        });
+    });
+</script>
+</body>
+</html>

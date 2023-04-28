@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head :: head"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox float-e-margins">
+    <div class="ibox-content" style="width: 98%;">
+      <form id="ec" th:action="@{/houseUser/update}" method="post" class="form-horizontal">
+        <input type="hidden" name="id" th:value="${houseUser.id}">
+        <div class="form-group">
+          <label class="col-sm-2 control-label">房东姓名：</label>
+          <div class="col-sm-10">
+            <input type="text" name="name" id="name" th:value="${houseUser.name}" class="form-control" />
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">手机：</label>
+          <div class="col-sm-10">
+            <input type="text" name="phone" id="phone" th:value="${houseUser.phone}" class="form-control" />
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">性别</label>
+          <div class="col-sm-10">
+            <div class="col-sm-10">
+              <div class="radio">
+                <label><input type="radio" th:checked="${houseUser.sex} eq 1" value="1" name="sex">男</label>
+              </div>
+              <div class="radio">
+                <label> <input type="radio" th:checked="${houseUser.sex} eq 2" value="2" name="sex">女</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">身份证号：</label>
+          <div class="col-sm-10">
+            <input type="text" name="idNo" id="idNo" th:value="${houseUser.idNo}" class="form-control" />
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group posf">
+          <div class="col-sm-4 col-sm-offset-2 text-right">
+            <button class="btn btn-primary" type="submit">确定</button>
+            <button class="btn btn-white" type="button" onclick="javascript:opt.closeWin();" value="取消">取消</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

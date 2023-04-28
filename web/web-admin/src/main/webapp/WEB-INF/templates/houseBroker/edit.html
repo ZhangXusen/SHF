@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head :: head"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox float-e-margins">
+    <div class="ibox-content" style="width: 98%;">
+      <form id="ec" th:action="@{/houseBroker/update}" method="post" class="form-horizontal">
+        <input type="hidden" name="id" th:value="${houseBroker.id}">
+        <div class="form-group">
+          <label class="col-sm-2 control-label">经纪人：</label>
+          <div class="col-sm-10">
+            <select name="brokerId" id="brokerId" class="form-control">
+              <option value="">-请选择-</option>
+              <option th:each="item,it : ${adminList}" th:text="${item.name}" th:value="${item.id}" th:selected="${item.id} eq ${houseBroker.brokerId}">-请选择-</option>
+            </select>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group posf">
+          <div class="col-sm-4 col-sm-offset-2 text-right">
+            <button class="btn btn-primary" type="submit">确定</button>
+            <button class="btn btn-white" type="button" onclick="javascript:opt.closeWin();" value="取消">取消</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

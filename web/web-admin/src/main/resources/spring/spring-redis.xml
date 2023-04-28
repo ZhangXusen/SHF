@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                         http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--Jedis连接池的相关配置-->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!--最大连接数, 默认8个-->
+        <property name="maxTotal" value="100"></property>
+        <!--最大空闲连接数, 默认8个-->
+        <property name="maxIdle" value="50"></property>
+        <!--允许借调 在获取连接的时候检查有效性, 默认false-->
+        <property name="testOnBorrow" value="true"/>
+        <!--允许归还 在return给pool时，是否提前进行validate操作-->
+        <property name="testOnReturn" value="true"/>
+    </bean>
+    <!--配置JedisConnectionFactory-->
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="192.168.6.100"/>
+        <property name="port" value="6379"/>
+        <property name="database" value="0"/>
+        <property name="poolConfig" ref="jedisPoolConfig"/>
+    </bean>
+    <!-- 配置session共享 -->
+    <bean id="redisHttpSessionConfiguration"
+          class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
+        <property name="maxInactiveIntervalInSeconds" value="600" />
+    </bean>
+</beans>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head :: head"></head>
+
+<style type="text/css">
+  select option{
+    width:260px;
+    height:25px;
+    line-height:25px;
+    padding: 5px 5px;
+  }
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox float-e-margins">
+    <form id="ec" th:action="@{/admin/assignRole}" method="post" class="form-horizontal">
+      <input type="hidden" name="adminId" th:value="${adminId}">
+      <input type="hidden" name="roleIds" id="roleIds" value="">
+      <div style="text-align: center;padding-left: 20px;">
+        <div id="s1" style="float: left;">
+          <div style="font-weight:900;">未选择</div>
+          <select id="select1" multiple="multiple" style="width: 220px;height: 280px;overflow-y:auto;" ondblclick="funRight()">
+            <option th:each="item: ${noAssginRoleList}" th:value="${item.id}" th:text="${item.roleName}">11</option>
+          </select>
+        </div>
+        <div style="float: left;padding-top:120px;">
+          <br />
+          <button type="button" id="right"> &gt;&gt; </button><br /><br />
+
+          <button type="button" id="left">  &lt;&lt; </button>
+
+        </div>
+        <div id="s2" style="float: left;">
+          <div style="font-weight:900;">已选择</div>
+          <select id="select2" multiple="multiple" style="width: 220px;height: 280px;overflow-y:auto;" ondblclick="funLeft()">
+            <option th:each="item: ${assginRoleList}" th:value="${item.id}" th:text="${item.roleName}">11</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="clear: left;padding-top: 20px;">
+          <button type="button" class="btn btn-sm btn-primary " onclick="add()" style="margin-left: 10px;"> 保存</button>
+          <button type="button" class="btn btn-sm btn-primary " onclick="cancel()" style="margin-left: 10px;"> 重置</button>
+          <button class="btn btn-sm btn-white" type="button" onclick="javascript:opt.closeWin();" value="取消">取消</button>
+        </div>
+        <br/>
+      </div>
+    </form>
+  </div>
+</div>
+<script th:inline="javascript">
+  $(function(){
+    $("#right").on("click",function() {
+      $("#select1 option").each(function(index, item){
+        if(item.selected == true){
+          document.getElementById("select2").appendChild(item);
+        }
+      });
+    });
+
+    $("#left").on("click",function() {
+      $("#select2 option").each(function(index, item){
+        if(item.selected == true){
+          document.getElementById("select1").appendChild(item);
+        }
+      });
+    });
+  });
+
+  function funRight() {
+    $("#right").trigger("click");
+  }
+
+  function funLeft() {
+    $("#left").trigger("click");
+  }
+
+  function add() {
+    var roleIds = "";
+    $("#select2 option").each(function(index, item){
+      roleIds += $(item).val() + ",";
+    });
+    $("#roleIds").val(roleIds);
+    document.forms.ec.submit();
+  }
+
+  function cancel() {
+    window.location.reload();
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="Author" contect="http://www.webqin.net">
+    <title>尚好房</title>
+    <link rel="shortcut icon" href="/static//static/images/favicon.ico"/>
+    <link type="text/css" href="/static/css/css.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/js/js.js"></script>
+    <script src="/static/js/vue.js"></script>
+    <script src="/static/js/axios.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //导航定位
+            $(".nav li:eq(6)").addClass("navCur");
+        })
+    </script>
+</head>
+
+<body>
+<div id="register">
+    <div class="header">
+        <div class="width1190">
+            <div class="fl">您好，欢迎来到尚好房！</div>
+            <div class="fr">
+                <a href="login.html">登录</a> |
+                <a href="register.html">注册</a> |
+                <a href="javascript:;">加入收藏</a> |
+                <a href="javascript:;">设为首页</a>
+            </div>
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div>
+    <div class="list-nav">
+        <div class="width1190">
+            <div class="list"><h3>房源分类</h3></div><!--list/-->
+            <ul class="nav">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="about.html">关于我们</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+                <div class="clears"></div>
+            </ul><!--nav/-->
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div><!--list-nav/-->
+    <div class="banner" style="background:url(/static/images/ban.jpg) center center no-repeat;"></div>
+
+    <div class="content">
+        <div class="width1190">
+            <div class="reg-logo">
+                <form id="signupForm" method="post" action="" class="zcform">
+                    <p class="clearfix">
+                        <label class="one" for="agent">手机号码：</label>
+                        <input id="agent" v-model="registerVo.phone" type="text" class="required" style="width: 200px;" maxlength="11" placeholder="请输入您的手机号码"/>
+                        <input type="button" :value="codeTest" @click="getCodeFun()" style="padding: 5px 5px;width: 100px;height: 48px;"/>
+                    </p>
+                    <p class="clearfix">
+                        <span style="color: red;margin-left: 90px;">{{valid.phone}}</span>
+                    </p>
+                    <p class="clearfix">
+                        <label class="one" for="agent">验证码：</label>
+                        <input id="agent" v-model="registerVo.code" type="text" class="required" maxlength="4" value placeholder="请输入手机验证码"/>
+                    </p>
+                    <p class="clearfix">
+                        <span style="color: red;margin-left: 90px;">{{valid.code}}</span>
+                    </p>
+                    <p class="clearfix">
+                        <label class="one" for="password">登录密码：</label>
+                        <input id="password" v-model="registerVo.password" type="password" maxlength="9"
+                               class="{required:true,rangelength:[8,20],}" value placeholder="请输入密码"/>
+                    </p>
+                    <p class="clearfix">
+                        <span style="color: red;margin-left: 90px;">{{valid.password}}</span>
+                    </p>
+                    <p class="clearfix">
+                        <label class="one" for="confirm_password">确认密码：</label>
+                        <input id="confirm_password" v-model="registerVo.confirmPassword"  type="password" maxlength="9"
+                               class="{required:true,equalTo:'#password'}" value placeholder="请再次输入密码"/>
+                    </p>
+                    <p class="clearfix">
+                        <span style="color: red;margin-left: 90px;">{{valid.confirmPassword}}</span>
+                    </p>
+                    <p class="clearfix">
+                        <label class="one" for="agent">昵称：</label>
+                        <input id="agent" v-model="registerVo.nickName" type="text" maxlength="10" class="required" value placeholder="请输入您的昵称"/>
+                    </p>
+                    <p class="clearfix">
+                        <span style="color: red;margin-left: 90px;">{{valid.nickName}}</span>
+                    </p>
+                    <!--<p class="clearfix agreement">
+                        <input type="checkbox" />
+                        <b class="left">已阅读并同意<a href="#">《用户协议》</a></b>
+                    </p>-->
+                    <p class="clearfix"><input class="submit" type="button" @click="submitRegister" value="立即注册"/></p>
+                </form>
+                <div class="reg-logo-right">
+                    <h3>如果您已有账号，请</h3>
+                    <a href="login.html" class="logo-a">立即登录</a>
+                </div><!--reg-logo-right/-->
+                <div class="clears"></div>
+            </div><!--reg-logo/-->
+        </div><!--width1190/-->
+    </div><!--content/-->
+
+    <div class="footer">
+        <div class="width1190">
+            <div class="fl"><a href="index.html"><strong>尚好房</strong></a><a href="about.html">关于我们</a><a
+                    href="contact.html">联系我们</a><a href="follow.html">个人中心</a></div>
+            <div class="fr">
+                <dl>
+                    <dt><img src="/static/images/erweima.png" width="76" height="76"/></dt>
+                    <dd>微信扫一扫<br/>房价点评，精彩发布</dd>
+                </dl>
+                <dl>
+                    <dt><img src="/static/images/erweima.png" width="76" height="76"/></dt>
+                    <dd>微信扫一扫<br/>房价点评，精彩发布</dd>
+                </dl>
+                <div class="clears"></div>
+            </div>
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div><!--footer/-->
+    <div class="copy">Copyright@ 2020 尚好房 版权所有 沪ICP备1234567号-0&nbsp;&nbsp;&nbsp;&nbsp;技术支持：XXX</div>
+    <div class="bg100"></div>
+</div>
+<script>
+    var app =new Vue({
+        el: '#register',
+
+        data: {
+            registerVo: {
+                phone: '',
+                password: '',
+                confirmPassword: '',
+                nickName: '',
+                code: ''
+            },
+
+            valid: {
+                phone: '',
+                password: '',
+                confirmPassword: '',
+                nickName: '',
+                code: ''
+            },
+
+            sending: true,      //是否发送验证码
+            second: 60,        //倒计时间
+            codeTest: '获取验证码'
+        },
+
+        mounted () {
+        },
+
+        methods: {
+            submitRegister() {
+                var isValid = true
+                if(!(/^1[34578]\d{9}$/.test(this.registerVo.phone))) {
+                    this.valid.phone = '手机号码不正确'
+                    isValid = false
+                }
+                if(this.registerVo.code == '') {
+                    this.valid.code = '验证码必须输入';
+                    isValid = false
+                }
+                if(this.registerVo.password == '') {
+                    this.valid.password = '密码必须输入';
+                    isValid = false
+                }
+                if(this.registerVo.password != this.registerVo.confirmPassword) {
+                    this.valid.confirmPassword = '密码不一致';
+                    isValid = false
+                }
+                if(this.registerVo.nickName == '') {
+                    this.valid.nickName = '昵称必须输入';
+                    isValid = false
+                }
+                if(!isValid) {
+                    return
+                }
+                var that = this
+                axios.post('/userInfo/register', this.registerVo).then(function (response) {
+                    if(response.data.code == 200){
+                        window.location.href = 'login.html'
+                    }else{
+                        alert(response.data.message);
+                    }
+                });
+
+            },
+
+            getCodeFun() {
+                if (!this.sending)
+                    return;
+
+                if (!(/^1[34578]\d{9}$/.test(this.registerVo.phone))) {
+                    alert('手机号码不正确');
+                    return;
+                }
+
+                var that = this
+                axios.get('/userInfo/sendCode/'+this.registerVo.phone).then(function (response) {
+                    that.sending = false;
+                    that.registerVo.code = response.data.data
+                    that.timeDown();
+                });
+            },
+
+            timeDown() {
+                let result = setInterval(() => {
+                    --this.second;
+                    this.codeTest = this.second
+                    if (this.second < 1) {
+                        clearInterval(result);
+                        this.sending = true;
+                        this.second = 60;
+                        this.codeTest = "获取验证码"
+                    }
+                }, 1000);
+            }
+        }
+    })
+</script>
+</body>
+</html>

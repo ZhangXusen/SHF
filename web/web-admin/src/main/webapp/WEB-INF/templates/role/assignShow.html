@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head :: head"></head>
+
+<link rel="stylesheet" th:href="@{/js/plugins/zTree_v3/zTreeStyle.css}" type="text/css">
+<script type="text/javascript" th:src="@{/js/plugins/zTree_v3/jquery.ztree.core.js}"></script>
+<script type="text/javascript" th:src="@{/js/plugins/zTree_v3/jquery.ztree.excheck.js}"></script>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content" style="width: 98%;">
+            <form id="ec" th:action="@{/role/assignPermission}" method="post" class="form-horizontal">
+                <input type="hidden" name="roleId" th:value="${roleId}">
+                <input type="hidden" name="permissionIds" id="permissionIds" value="">
+                <div class="zTreeDemoBackground left">
+                    <ul id="treeDemo" class="ztree"></ul>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group posf">
+                    <div class="col-sm-4 col-sm-offset-2 text-right">
+                        <button class="btn btn-primary" type="button" id="button">确定</button>
+                        <button class="btn btn-white" type="button" onclick="javascript:opt.closeWin();" value="取消">
+                            取消
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    $(function () {
+        // 文档地址:http://www.treejs.cn/v3/demo.php#_201
+        var setting = {
+            check: {
+                enable: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            }
+        };
+
+        //var zNodes = JSON.parse([[${zNodes}]]);
+        var zNodes = [[${zNodes}]];
+        // var zNodes =[
+        //     { id:1, pId:0, name:"随意勾选 1", open:true},
+        //     { id:11, pId:1, name:"随意勾选 1-1", open:true},
+        //     { id:111, pId:11, name:"随意勾选 1-1-1"},
+        //     { id:112, pId:11, name:"随意勾选 1-1-2"},
+        //     { id:12, pId:1, name:"随意勾选 1-2", open:true},
+        //     { id:121, pId:12, name:"随意勾选 1-2-1"},
+        //     { id:122, pId:12, name:"随意勾选 1-2-2"},
+        //     { id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
+        //     { id:21, pId:2, name:"随意勾选 2-1"},
+        //     { id:22, pId:2, name:"随意勾选 2-2", open:true},
+        //     { id:221, pId:22, name:"随意勾选 2-2-1", checked:true},
+        //     { id:222, pId:22, name:"随意勾选 2-2-2"},
+        //     { id:23, pId:2, name:"随意勾选 2-3"}
+        // ];
+
+        var zTree = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        zTree.expandAll(true);
+        $("#button").on("click", function () {
+            var checkedNodes = zTree.getCheckedNodes();
+            console.log(checkedNodes)
+            var permissionIdList = [];
+            for (var i = 0; i < checkedNodes.length; i++) {
+                permissionIdList.push(checkedNodes[i].id)
+            }
+            $("#permissionIds").val(permissionIdList.join(","));
+            document.forms.ec.submit();
+        });
+    });
+</script>
+</body>
+</html>

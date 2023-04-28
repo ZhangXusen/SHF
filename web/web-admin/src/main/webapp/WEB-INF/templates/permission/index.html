@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="common/head :: head"></head>
+
+<body class="gray-bg">
+<form id="ec" action="#" method="post">
+  <div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+          <div class="ibox-content">
+            <div>
+              <button type="button" class="btn btn-sm btn-primary create" th:attr="data-id=0,data-type=1,data-name='一级菜单'">新增一级菜单</button>
+              <button type="button" id="loading-example-btn" onclick="javascript:window.location.reload();" class="btn btn-white btn-sm">刷新</button>
+            </div>
+            <table class="table table-striped table-bordered table-hover dataTables-example">
+              <thead>
+              <tr>
+                <th>权限名称</th>
+                <th>菜单url</th>
+                <th>权限标识</th>
+                <th>类型</th>
+                <th>排序</th>
+                <th>创建时间</th>
+                <th>操作 </th>
+              </tr>
+              </thead>
+              <tbody>
+              <div th:each="one: ${list}">
+                <tr class="gradeX">
+                  <td th:text="${one.name}">22</td>
+                  <td th:text="${one.url}">33</td>
+                  <td th:text="${one.code}">22</td>
+                  <td>
+                    <strong><span th:if="${one.type } eq 1" style="color: blue">菜单</span></strong>
+                    <strong><span th:if="${one.type } eq 2">按钮</span></strong>
+                  </td>
+                  <td th:text="${one.sort}">22</td>
+                  <td th:text="${#dates.format(one.createTime,'yyyy-MM-dd HH:mm:ss')}" >33</td>
+                  <td class="text-center">
+                    <a class="create" th:attr="data-id=${one.id},data-type=1,data-name=${one.name}" sec:authorize="hasAuthority('permission.create')">新增二级菜单</a>
+                    <a class="edit" th:attr="data-id=${one.id}">修改</a>
+                    <a class="delete" th:attr="data-id=${one.id}">删除</a>
+                  </td>
+                </tr>
+                <div th:each="two: ${one.children}">
+                  <tr class="gradeX">
+                    <td th:text="'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + ${two.name}">22</td>
+                    <td th:text="${two.url}">33</td>
+                    <td th:text="${two.code}">22</td>
+                    <td>
+                      <strong><span th:if="${two.type } eq 1" style="color: blue">菜单</span></strong>
+                      <strong><span th:if="${two.type } eq 2">按钮</span></strong>
+                    </td>
+                    <td th:text="${two.sort}">22</td>
+                    <td th:text="${#dates.format(two.createTime,'yyyy-MM-dd HH:mm:ss')}" >33</td>
+                    <td class="text-center">
+                      <a class="create" th:attr="data-id=${two.id},data-type=2,data-name=${two.name}" sec:authorize="hasAuthority('permission.create')">新增功能按钮</a>
+                      <a class="edit" th:attr="data-id=${two.id}">修改</a>
+                      <a class="delete" th:attr="data-id=${two.id}">删除</a>
+                    </td>
+                  </tr>
+                  <div th:each="three: ${two.children}">
+                    <tr class="gradeX">
+                      <td th:text="'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + ${three.name}">22</td>
+                      <td th:text="${three.url}">33</td>
+                      <td th:text="${three.code}">22</td>
+                      <td>
+                        <strong><span th:if="${three.type } eq 1" style="color: blue">菜单</span></strong>
+                        <strong><span th:if="${three.type } eq 2">按钮</span></strong>
+                      </td>
+                      <td th:text="${three.sort}">22</td>
+                      <td th:text="${#dates.format(three.createTime,'yyyy-MM-dd HH:mm:ss')}" >33</td>
+                      <td class="text-center">
+                        <a class="edit" th:attr="data-id=${three.id}">修改</a>
+                        <a class="delete" th:attr="data-id=${three.id}">删除</a>
+                      </td>
+                    </tr>
+                  </div>
+                </div>
+              </div>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<script th:inline="javascript">
+  $(function(){
+    $(".create").on("click",function () {
+      var parentId = $(this).attr("data-id");
+      var type = $(this).attr("data-type");
+      var parentName = $(this).attr("data-name");
+      opt.openWin('/permission/create?parentId='+parentId+'&type='+type+'&parentName='+parentName,'新增',630,430)
+    });
+    $(".edit").on("click",function () {
+      var id = $(this).attr("data-id");
+      opt.openWin('/permission/edit/' + id,'修改',580,430);
+    });
+    $(".delete").on("click",function(){
+      var id = $(this).attr("data-id");
+      opt.confirm('/permission/delete/'+id);
+    });
+  });
+</script>
+</body>
+</html>

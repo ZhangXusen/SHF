@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head :: head"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox float-e-margins">
+    <div class="ibox-content" style="width: 98%;">
+      <form id="ec" th:action="@{/house/update}" method="post" class="form-horizontal">
+        <input type="hidden" name="id" th:value="${house.id}">
+        <div class="form-group">
+          <label class="col-sm-2 control-label">小区：</label>
+          <div class="col-sm-10">
+            <select name="communityId" id="communityId" class="form-control">
+              <option value="">-选择小区-</option>
+              <option th:each="item,it : ${communityList}" th:text="${item.name}" th:value="${item.id}" th:selected="${item.id} eq ${house.communityId}">-请选择-</option>
+            </select>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">房源名称：</label>
+          <div class="col-sm-10">
+            <input type="text" name="name" id="name" th:value="${house.name}" class="form-control" />
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">描述：</label>
+          <div class="col-sm-10">
+            <input type="text" name="description" id="description" th:value="${house.description}" class="form-control" />
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">总价：万元：</label>
+          <div class="col-sm-10">
+            <input type="text" name="totalPrice" id="totalPrice" th:value="${house.totalPrice}" class="form-control" />
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">单位价格：</label>
+          <div class="col-sm-10">
+            <input type="text" name="unitPrice" id="unitPrice" th:value="${house.unitPrice}" class="form-control" />
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">建筑面积：</label>
+          <div class="col-sm-10">
+            <input type="text" name="buildArea" id="buildArea" th:value="${house.buildArea}" class="form-control" />
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">套内面积：</label>
+          <div class="col-sm-10">
+            <input type="text" name="insideArea" id="insideArea" th:value="${house.insideArea}" class="form-control" />
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">户型：</label>
+          <div class="col-sm-10">
+            <select name="houseTypeId" id="houseTypeId" class="form-control">
+              <option value="">-请选择-</option>
+              <option th:each="item,it : ${houseTypeList}" th:text="${item.name}" th:value="${item.id}" th:selected="${item.id} eq ${house.houseTypeId}">-请选择-</option>
+            </select>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">楼层：</label>
+          <div class="col-sm-10">
+            <select name="floorId" id="floorId" class="form-control">
+              <option value="">-请选择-</option>
+              <option th:each="item,it : ${floorList}" th:text="${item.name}" th:value="${item.id}" th:selected="${item.id} eq ${house.floorId}">-请选择-</option>
+            </select>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">建筑结构：</label>
+          <div class="col-sm-10">
+            <select name="buildStructureId" id="buildStructureId" class="form-control">
+              <option value="">-请选择-</option>
+              <option th:each="item,it : ${buildStructureList}" th:text="${item.name}" th:value="${item.id}" th:selected="${item.id} eq ${house.buildStructureId}">-请选择-</option>
+            </select>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">朝向：</label>
+          <div class="col-sm-10">
+            <select name="directionId" id="directionId" class="form-control">
+              <option value="">-请选择-</option>
+              <option th:each="item,it : ${directionList}" th:text="${item.name}" th:value="${item.id}" th:selected="${item.id} eq ${house.directionId}">-请选择-</option>
+            </select>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">装修情况：</label>
+          <div class="col-sm-10">
+            <select name="decorationId" id="decorationId" class="form-control">
+              <option value="">-请选择-</option>
+              <option th:each="item,it : ${decorationList}" th:text="${item.name}" th:value="${item.id}" th:selected="${item.id} eq ${house.decorationId}">-请选择-</option>
+            </select>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">房屋用途：</label>
+          <div class="col-sm-10">
+            <select name="houseUseId" id="houseUseId" class="form-control">
+              <option value="">-请选择-</option>
+              <option th:each="item,it : ${houseUseList}" th:text="${item.name}" th:value="${item.id}" th:selected="${item.id} eq ${house.houseUseId}">-请选择-</option>
+            </select>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">电梯比例：</label>
+          <div class="col-sm-10">
+            <input type="text" name="elevatorRatio" id="elevatorRatio" th:value="${house.elevatorRatio}" class="form-control" />
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">挂牌日期：</label>
+          <div class="col-sm-10">
+            <input name="listingDateString" th:value="${house.listingDateString}" class="form-control layer-date" placeholder="YYYY-MM-DD" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})">
+            <label class="laydate-icon"></label>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">上次交易日期：</label>
+          <div class="col-sm-10">
+            <input name="lastTradeDateString" th:value="${house.lastTradeDateString}" class="form-control layer-date" placeholder="YYYY-MM-DD" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})">
+            <label class="laydate-icon"></label>
+          </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group posf">
+          <div class="col-sm-4 col-sm-offset-2 text-right">
+            <button class="btn btn-primary" type="submit">确定</button>
+            <button class="btn btn-white" type="button" onclick="javascript:opt.closeWin();" value="取消">取消</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

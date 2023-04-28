@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="Author" contect="http://www.webqin.net">
+    <title>尚好房</title>
+    <link rel="shortcut icon" href="./static/images/favicon.ico"/>
+    <link type="text/css" href="./static/css/css.css" rel="stylesheet"/>
+    <script type="text/javascript" src="./static/js/jquery.js"></script>
+    <script type="text/javascript" src="./static/js/js.js"></script>
+    <script src="./static/js/vue.js"></script>
+    <script src="./static/js/axios.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //导航定位
+            $(".nav li:eq(1)").addClass("navCur");
+        })
+    </script>
+</head>
+
+<body>
+<div id="list">
+    <div class="header">
+        <div class="width1190">
+            <div class="fl">您好，欢迎来到尚好房！</div>
+            <div class="fr" v-if="userInfo.nickName == ''">
+                <a href="login.html">登录</a> |
+                <a href="register.html">注册</a> |
+                <a href="javascript:;">加入收藏</a> |
+                <a href="javascript:;">设为首页</a>
+            </div>
+            <div class="fr" v-else>
+                <a href="javascript:;">欢迎 {{ userInfo.nickName }}</a> |
+                <a href="javascript:;" @click="logout">退出</a> |
+                <a href="follow.html">我的关注</a> |
+                <a href="javascript:;">加入收藏</a> |
+                <a href="javascript:;">设为首页</a>
+            </div>
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div>
+    <div class="list-nav">
+        <div class="width1190">
+            <div class="list"><h3>房源分类</h3></div><!--list/-->
+            <ul class="nav">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="about.html">关于我们</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+                <div class="clears"></div>
+            </ul><!--nav/-->
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div><!--list-nav/-->
+    <div class="banner" style="background:url(./static/images/ban.jpg) center center no-repeat;"></div>
+
+    <div class="content">
+        <div class="width1190">
+            <form action="#" method="get" class="pro-search">
+                <table>
+                    <tr>
+                        <th>房源区域：</th>
+                        <td>
+                            <div style="line-height: 30px;">
+                                <a href="javascript:;" @click="searchArea('')"
+                                   :class="houseQueryVo.areaId=='' ? 'pro-cur' : ''">不限</a>
+                                <a href="javascript:;" @click="searchArea(item.id)"
+                                   :class="item.id==houseQueryVo.areaId ? 'pro-cur' : ''" v-for="item in areaList"
+                                   :key="item.id">{{ item.name }}</a>
+                            </div>
+                            <!--新增区域-->
+                            <div style="font-size: 12px;border-top:#ccc 1px dotted;">
+                                <a href="javascript:;" @click="searchPlate(item.id)"
+                                   :class="item.id==houseQueryVo.plateId ? 'pro-cur' : ''" v-for="item in plateList"
+                                   :key="item.id">{{ item.name }}</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>户型：</th>
+                        <td>
+                            <a href="javascript:;" @click="searchHouseType('')"
+                               :class="houseQueryVo.houseTypeId=='' ? 'pro-cur' : ''">不限</a>
+                            <a href="javascript:;" @click="searchHouseType(item.id)"
+                               :class="item.id==houseQueryVo.houseTypeId ? 'pro-cur' : ''" v-for="item in houseTypeList"
+                               :key="item.id">{{ item.name }}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>楼层：</th>
+                        <td>
+                            <a href="javascript:;" @click="searchFloor('')"
+                               :class="houseQueryVo.floorId=='' ? 'pro-cur' : ''">不限</a>
+                            <a href="javascript:;" @click="searchFloor(item.id)"
+                               :class="item.id==houseQueryVo.floorId ? 'pro-cur' : ''" v-for="item in floorList"
+                               :key="item.id">{{ item.name }}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>建筑结构：</th>
+                        <td>
+                            <a href="javascript:;" @click="searchBuildStructure('')"
+                               :class="houseQueryVo.buildStructureId=='' ? 'pro-cur' : ''">不限</a>
+                            <a href="javascript:;" @click="searchBuildStructure(item.id)"
+                               :class="item.id==houseQueryVo.buildStructureId ? 'pro-cur' : ''"
+                               v-for="item in buildStructureList" :key="item.id">{{ item.name }}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>朝向：</th>
+                        <td>
+                            <a href="javascript:;" @click="searchDirection('')"
+                               :class="houseQueryVo.directionId=='' ? 'pro-cur' : ''">不限</a>
+                            <a href="javascript:;" @click="searchDirection(item.id)"
+                               :class="item.id==houseQueryVo.directionId ? 'pro-cur' : ''" v-for="item in directionList"
+                               :key="item.id">{{ item.name }}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>装修情况：</th>
+                        <td>
+                            <a href="javascript:;" @click="searchDecoration('')"
+                               :class="houseQueryVo.decorationId=='' ? 'pro-cur' : ''">不限</a>
+                            <a href="javascript:;" @click="searchDecoration(item.id)"
+                               :class="item.id==houseQueryVo.decorationId ? 'pro-cur' : ''"
+                               v-for="item in decorationList" :key="item.id">{{ item.name }}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>房屋用途：</th>
+                        <td>
+                            <a href="javascript:;" @click="searchHouseUse('')"
+                               :class="houseQueryVo.houseUseId=='' ? 'pro-cur' : ''">不限</a>
+                            <a href="javascript:;" @click="searchHouseUse(item.id)"
+                               :class="item.id==houseQueryVo.houseUseId ? 'pro-cur' : ''" v-for="item in houseUseList"
+                               :key="item.id">{{ item.name }}</a>
+                        </td>
+                    </tr>
+                </table>
+                <div class="paixu">
+                    <strong>排序：</strong>
+                    <a href="javascript:;" @click="sortDefault()"
+                       :class="houseQueryVo.defaultSort=='1' ? 'pai-cur' : ''">默认</a>
+                    <a href="javascript:;" @click="sortPrice()" :class="houseQueryVo.priceSort=='1' ? 'pai-cur' : ''">价格
+                        &or;</a>
+                    <a href="javascript:;" @click="sortTime()" :class="houseQueryVo.timeSort=='1' ? 'pai-cur' : ''">最新
+                        &or;</a>
+                </div>
+            </form><!--pro-search/-->
+        </div><!--width1190/-->
+        <div class="width1190">
+            <div class="pro-left">
+                <dl v-for="item in page.list" :key="item.id">
+                    <dt><a :href="'info.html?id='+item.id"><img :src="item.defaultImageUrl" width="286"
+                                                                height="188"/></a></dt>
+                    <dd>
+                        <h3><a :href="'info.html?id='+item.id">{{ item.name }}</a></h3>
+                        <div class="pro-wei">
+                            <img src="/static/images/weizhi.png" width="12" height="16"/> <strong class="red">{{
+                            item.communityName }}</strong>
+                        </div>
+                        <div class="pro-fang">{{ item.buildArea }}平 {{ item.houseTypeName}} {{ item.floorName}} {{
+                            item.directionName}}
+                        </div>
+                        <div class="pra-fa"> 发布时间：{{ item.createTimeString }}</div>
+                    </dd>
+                    <div class="price">¥ <strong>{{ item.totalPrice }}</strong><span class="font12">万元</span></div>
+                    <div class="clears"></div>
+                </dl>
+            </div><!--pro-left/-->
+
+            <div class="clears"></div>
+            <ul class="pages">
+                <li>
+                    <a href="javascript:;" @click="fetchData(page.prePage)" v-if="page.hasPreviousPage">上一页</a>
+                </li>
+                <li v-for="item in page.navigatepageNums" :class="item==page.pageNum ? 'page_active' : ''">
+                    <a href="javascript:;" @click="fetchData(item)">{{ item }}</a>
+                </li>
+                <li>
+                    <a href="javascript:;" @click="fetchData(page.nextPage)" v-if="page.hasNextPage">下一页</a>
+                </li>
+            </ul>
+        </div><!--width1190/-->
+    </div><!--content/-->
+
+    <div class="footer">
+        <div class="width1190">
+            <div class="fl"><a href="index.html"><strong>尚好房</strong></a><a href="about.html">关于我们</a><a
+                    href="contact.html">联系我们</a><a href="follow.html">个人中心</a></div>
+            <div class="fr">
+                <dl>
+                    <dt><img src="./static/images/erweima.png" width="76" height="76"/></dt>
+                    <dd>微信扫一扫<br/>房价点评，精彩发布</dd>
+                </dl>
+                <dl>
+                    <dt><img src="./static/images/erweima.png" width="76" height="76"/></dt>
+                    <dd>微信扫一扫<br/>房价点评，精彩发布</dd>
+                </dl>
+                <div class="clears"></div>
+            </div>
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div><!--footer/-->
+    <div class="copy">Copyright@ 2020 尚好房 版权所有 沪ICP备1234567号-0&nbsp;&nbsp;&nbsp;&nbsp;技术支持：XXX</div>
+    <div class="bg100"></div>
+</div>
+<script>
+    new Vue({
+        el: '#list',
+
+        data: {
+            userInfo: {
+                nickName: ''
+            },
+            areaList: [],
+            plateList: [],
+            houseTypeList: [],
+            floorList: [],
+            buildStructureList: [],
+            directionList: [],
+            decorationList: [],
+            houseUseList: [],
+
+            //接口返回的分页数据，在此声明
+            page: {
+                list: [],
+                pageNum: 1,
+                pageSize: 2,
+                pages: 1,
+                navigatepageNums: [1, 2, 3, 4],
+                prePage: 0,
+                nextPage: 0,
+                hasPreviousPage: false,
+                hasNextPage: false
+            },
+
+            houseQueryVo: {
+                areaId: '',
+                plateId: '',
+                houseTypeId: '',
+                floorId: '',
+                buildStructureId: '',
+                directionId: '',
+                decorationId: '',
+                houseUseId: '',
+
+                defaultSort: 1,
+                priceSort: null,
+                timeSort: null,
+            },
+        },
+
+        created() {
+            this.fetchDictData()
+            this.fetchData(1);
+            this.login()
+        },
+
+        methods: {
+            fetchDictData() {
+                //axios在then的内部不能使用Vue的实例化的this, 因为在内部 this 没有被绑定
+                var that = this
+                axios.get('/dict/findListByDictCode/beijing').then(function (response) {
+                    that.areaList = response.data.data
+                });
+                axios.get('/dict/findListByDictCode/houseType').then(function (response) {
+                    that.houseTypeList = response.data.data
+                });
+                axios.get('/dict/findListByDictCode/floor').then(function (response) {
+                    that.floorList = response.data.data
+                });
+                axios.get('/dict/findListByDictCode/buildStructure').then(function (response) {
+                    that.buildStructureList = response.data.data
+                });
+                axios.get('/dict/findListByDictCode/direction').then(function (response) {
+                    that.directionList = response.data.data
+                });
+                axios.get('/dict/findListByDictCode/decoration').then(function (response) {
+                    that.decorationList = response.data.data
+                });
+                axios.get('/dict/findListByDictCode/houseUse').then(function (response) {
+                    that.houseUseList = response.data.data
+                });
+            },
+            login() {
+                let userInfoString = window.localStorage.getItem("userInfo")
+                if (userInfoString != null && userInfoString != '') {
+                    this.userInfo = JSON.parse(userInfoString)
+                }
+            },
+
+            logout() {
+                axios.get('/userInfo/logout').then(function (response) {
+                    window.localStorage.setItem("userInfo", '')
+                    window.location.href = 'index.html'
+                });
+            },
+            fetchData(pageNum = 1) {
+                this.page.pageNum = pageNum
+                debugger
+                if (pageNum < 1) pageNum = 1
+
+                var that = this
+                axios.post('/house/list/' + pageNum + '/' + this.page.pageSize, this.houseQueryVo).then(function (response) {
+                    that.page = response.data.data
+                });
+            },
+
+            searchArea(id) {
+                this.houseQueryVo.areaId = id
+                this.houseQueryVo.plateId = ''
+                this.fetchData(1)
+
+                if (id == '') {
+                    this.plateList = []
+                    return
+                }
+                var that = this
+                axios.get('/dict/findListByParentId/' + id).then(function (response) {
+                    that.plateList = response.data.data
+                });
+            },
+            searchPlate(id) {
+                this.houseQueryVo.plateId = id
+                this.fetchData(1)
+            },
+            searchHouseType(id) {
+                this.houseQueryVo.houseTypeId = id
+                this.fetchData(1)
+            },
+            searchFloor(id) {
+                this.houseQueryVo.floorId = id
+                this.fetchData(1)
+            },
+            searchBuildStructure(id) {
+                this.houseQueryVo.buildStructureId = id
+                this.fetchData(1)
+            },
+            searchDirection(id) {
+                this.houseQueryVo.directionId = id
+                this.fetchData(1)
+            },
+            searchDecoration(id) {
+                this.houseQueryVo.decorationId = id
+                this.fetchData(1)
+            },
+            searchHouseUse(id) {
+                this.houseQueryVo.houseUseId = id
+                this.fetchData(1)
+            },
+
+            sortDefault() {
+                this.houseQueryVo.defaultSort = 1
+                this.houseQueryVo.priceSort = null
+                this.houseQueryVo.timeSort = null
+                this.fetchData(1)
+            },
+            sortPrice() {
+                this.houseQueryVo.defaultSort = null
+                this.houseQueryVo.priceSort = 1
+                this.houseQueryVo.timeSort = null
+                this.fetchData(1)
+            },
+            sortTime() {
+                this.houseQueryVo.defaultSort = null
+                this.houseQueryVo.priceSort = null
+                this.houseQueryVo.timeSort = 1
+                this.fetchData(1)
+            }
+        }
+    })
+</script>
+</body>
+</html>

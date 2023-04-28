@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.dao.HouseImageDao">
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        select id,
+               house_id,
+               image_name,
+               image_url,
+               type,
+               create_time,
+               update_time,
+               is_deleted
+    </sql>
+
+
+    <!--增-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into hse_house_image (id,
+                                     house_id,
+                                     image_name,
+                                     image_url,
+                                     type)
+        values (#{id},
+                #{houseId},
+                #{imageName},
+                #{imageUrl},
+                #{type})
+    </insert>
+    <!--删-->
+    <update id="delete">
+        update hse_house_image
+        set update_time = now(),
+            is_deleted  = 1
+        where id = #{id}
+    </update>
+    <!--改-->
+    <update id="update">
+        update hse_house_image set
+        <if test="houseId != null and houseId != ''">
+            house_id = #{houseId} ,
+        </if>
+        <if test="imageName != null and imageName != ''">
+            image_name = #{imageName} ,
+        </if>
+        <if test="imageUrl != null and imageUrl != ''">
+            image_url = #{imageUrl} ,
+        </if>
+        <if test="type != null and type != ''">
+            type = #{type} ,
+        </if>
+        update_time = now()
+        where id = #{id}
+    </update>
+    <!--查-->
+    <select id="getById" resultType="HouseImage">
+        <include refid="columns"></include>
+        from hse_house_image
+        where
+        id = #{id}
+    </select>
+    <select id="findList" resultType="HouseImage">
+        <include refid="columns"></include>
+        from hse_house_image
+        where house_id=#{houseId}
+        and type = #{type}
+        and is_deleted=0
+    </select>
+
+
+</mapper>

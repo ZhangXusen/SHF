@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head :: head"></head>
+<link rel="stylesheet" type="text/css" th:href="@{/css/plugins/webuploader/webuploader.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/demo/webuploader-demo.css}">
+<script th:src="@{/js/plugins/webuploader/webuploader.min.js}"></script>
+<script th:src="@{/js/demo/webuploader-demo.js}"></script>
+<script type="text/javascript">
+    // 添加全局站点信息 swf文件路径
+    var BASE_URL = '/static/js/plugins/webuploader';
+    //  自定义服务器上传地址
+    var BASE_UPLOAD = '/houseImage/upload/[[${houseId}]]/[[${type}]]';
+</script>
+<body class="gray-bg">
+<div class="row">
+    <div class="col-sm-9">
+        <div class="wrapper wrapper-content animated fadeInUp">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="ibox-content">
+                            <div class="page-container" id="uploadShow">
+                                <p>
+                                    您可以尝试文件拖拽，使用QQ截屏工具，然后激活窗口后粘贴，或者点击添加图片按钮，来体验此demo.</p>
+                                <div id="uploader" class="wu-example">
+                                    <div class="queueList">
+                                        <div id="dndArea" class="placeholder">
+                                            <div id="filePicker"></div>
+                                            <p>或将照片拖到这里，单次最多可选300张</p>
+                                        </div>
+                                    </div>
+                                    <div class="statusBar" style="display:none;">
+                                        <div class="progress">
+                                            <span class="text">0%</span>
+                                            <span class="percentage"></span>
+                                        </div>
+                                        <div class="info"></div>
+                                        <div class="btns">
+                                            <div id="filePicker2"></div>
+                                            <div class="uploadBtn">开始上传</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-primary" type="button" onclick="opt.closeWin(true);">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

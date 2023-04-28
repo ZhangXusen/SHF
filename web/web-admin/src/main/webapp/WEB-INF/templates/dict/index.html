@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head :: head"></head>
+
+<link rel="stylesheet" th:href="@{js/plugins/zTree_v3/zTreeStyle.css}" type="text/css">
+<script type="text/javascript" th:src="@{/js/plugins/zTree_v3/jquery.ztree.core.js}"></script>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox float-e-margins">
+    <div class="ibox-content" style="width: 98%;">
+
+      <div class="zTreeDemoBackground left">
+        <ul id="treeDemo" class="ztree"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script th:inline="javascript">
+  $(function(){
+    // 文档地址:http://www.treejs.cn/v3/demo.php#_108
+    var setting = {
+      async: {
+        enable: true,
+        url:"/dict/findZnodes",
+        type:"get",
+        autoParam:["id"],
+        dataFilter: filter
+      }
+    };
+
+    function filter(treeId, parentNode, childNodes) {
+      childNodes = childNodes.data
+      if (!childNodes) return null;
+      for (var i=0, l=childNodes.length; i<l; i++) {
+        childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+      }
+      return childNodes;
+    }
+
+    $(document).ready(function(){
+      $.fn.zTree.init($("#treeDemo"), setting);
+    });
+  });
+</script>
+</body>
+</html>
