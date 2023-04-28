@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="Author" contect="http://www.webqin.net">
+    <title>尚好房</title>
+    <link rel="shortcut icon" href="/static/images/favicon.ico"/>
+    <link type="text/css" href="/static/css/css.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/js/js.js"></script>
+    <script src="/static/js/vue.js"></script>
+    <script src="/static/js/axios.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //导航定位
+            $(".nav li:eq(6)").addClass("navCur");
+        })
+
+    </script>
+</head>
+
+<body>
+<div id="follow">
+    <div class="header">
+        <div class="width1190">
+            <div class="fl">您好，欢迎来到尚好房！</div>
+            <div class="fr" v-if="userInfo.nickName == ''">
+                <a href="login.html">登录</a> |
+                <a href="register.html">注册</a> |
+                <a href="javascript:;">加入收藏</a> |
+                <a href="javascript:;">设为首页</a>
+            </div>
+            <div class="fr" v-else>
+                <a href="javascript:;">欢迎 {{ userInfo.nickName }}</a> |
+                <a href="javascript:;" @click="logout">退出</a> |
+                <a href="follow.html">我的关注</a> |
+                <a href="javascript:;">加入收藏</a> |
+                <a href="javascript:;">设为首页</a>
+            </div>
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div>
+    <div class="list-nav">
+        <div class="width1190">
+            <div class="list">
+                <h3>房源分类</h3>
+            </div><!--list/-->
+            <ul class="nav">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="about.html">关于我们</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+                <div class="clears"></div>
+            </ul><!--nav/-->
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div><!--list-nav/-->
+    <div class="banner" style="background:url(/static/images/ban.jpg) center center no-repeat;"></div>
+
+    <div class="content">
+        <div class="width1190">
+            <div class="vip-left">
+                <div class="vipNav">
+                    <h3 class="vipTitle">会员中心</h3>
+                    <dl>
+                        <dt class="vipIcon3">账户设置</dt>
+                        <dd>
+                            <a href="javascript:;">我的资料</a>
+                            <a href="javascript:;">账户密码设置</a>
+                        </dd>
+                        <dt class="vipIcon1">我的尚好房</dt>
+                        <dd>
+                            <a href="follow.html" class="vipNavCur">关注房源</a>
+                            <a href="javascript:;">申请社区自由经纪人</a>
+                            <a href="javascript:;">社区自由经纪人</a>
+                        </dd>
+                    </dl>
+                </div><!--vipNav/-->
+            </div><!--vip-left/-->
+            <div class="vip-right">
+                <h3 class="vipright-title">关注房源</h3>
+                <ul class="guanzhueq">
+                    <li class="guanzhueqcur"><a href="javascript:;">二手房</a></li>
+                    <div class="clearfix"></div>
+                </ul><!--guanzhueq/-->
+                <div class="guanzhulist">
+                    <dl v-for="item in page.list" :key="item.id">
+                        <dt><a :href="'info.html?id='+item.houseId"><img :src="item.defaultImageUrl" width="190"
+                                                                         height="128"/></a></dt>
+                        <dd>
+                            <h3><a :href="'info.html?id='+item.houseId">{{ item.name }}</a></h3>
+                            <div class="guantext">{{ item.buildArea }}平 {{ item.houseTypeName}} {{ item.floorName}} {{
+                                item.directionName}}
+                            </div>
+                            <div class="guantext2">关注时间：{{ item.createTimeString}} <a href="javascript:;"
+                                                                                          class="qxgz"
+                                                                                          @click="cancelFollow(item.id)">取消关注</a>
+                            </div>
+                        </dd>
+                        <div class="price">¥ <strong>{{ item.totalPrice }}</strong><span class="font12">万元</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </dl>
+                </div><!--guanzhulist/-->
+                <div class="clears"></div>
+                <ul class="pages">
+                    <li>
+                        <a href="javascript:;" @click="fetchData(page.prePage)" v-if="page.hasPreviousPage">上一页</a>
+                    </li>
+                    <li v-for="item in page.navigatepageNums" :class="item==page.pageNum ? 'page_active' : ''">
+                        <a href="javascript:;" @click="fetchData(item)">{{ item }}</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" @click="fetchData(page.nextPage)" v-if="page.hasNextPage">下一页</a>
+                    </li>
+                </ul>
+            </div><!--vip-right/-->
+            <div class="clearfix"></div>
+        </div><!--width1190/-->
+    </div><!--content/-->
+
+    <div class="footer">
+        <div class="width1190">
+            <div class="fl"><a href="index.html"><strong>尚好房</strong></a><a href="about.html">关于我们</a><a
+                    href="contact.html">联系我们</a><a href="follow.html">个人中心</a></div>
+            <div class="fr">
+                <dl>
+                    <dt><img src="/static/images/erweima.png" width="76" height="76"/></dt>
+                    <dd>微信扫一扫<br/>房价点评，精彩发布</dd>
+                </dl>
+                <dl>
+                    <dt><img src="/static/images/erweima.png" width="76" height="76"/></dt>
+                    <dd>微信扫一扫<br/>房价点评，精彩发布</dd>
+                </dl>
+                <div class="clears"></div>
+            </div>
+            <div class="clears"></div>
+        </div><!--width1190/-->
+    </div><!--footer/-->
+    <div class="copy">Copyright@ 2020 尚好房 版权所有 沪ICP备1234567号-0&nbsp;&nbsp;&nbsp;&nbsp;技术支持：XXX</div>
+    <div class="bg100"></div>
+</div>
+<script src="/static/js/api/userFollow.js"></script>
+<script src="/static/js/api/user.js"></script>
+<script>
+    var app = new Vue({
+        el: '#follow',
+
+        data: {
+            //接口返回的分页数据，在此声明
+            page: {
+                list: [],
+                pageNum: 1,
+                pageSize: 2,
+                pages: 1,
+                navigatepageNums: [1, 2, 3, 4],
+                prePage: 0,
+                nextPage: 0,
+                hasPreviousPage: false,
+                hasNextPage: false
+            },
+
+            userInfo: {
+                nickName: ''
+            }
+        },
+
+        mounted() {
+            this.fetchData(1)
+            this.login()
+        },
+
+        methods: {
+            login() {
+                let userInfoString = window.localStorage.getItem("userInfo")
+                if (userInfoString != null && userInfoString != '') {
+                    this.userInfo = JSON.parse(userInfoString)
+                }
+            },
+
+            logout() {
+                axios.get('/userInfo/logout').then(function (response) {
+                    window.localStorage.setItem("userInfo", '')
+                    window.location.href = 'index.html'
+                });
+            },
+            cancelFollow(id) {
+                var that = this
+                axios.get('/userFollow/auth/cancelFollow/' + id).then(response => {
+                    //如果没登录，拦截器会返回208状态，跳转登录页面
+                    if (response.data.code == 208) {
+                        window.location.href = 'login.html?originUrl=' + window.location.href
+                    } else {
+                        that.fetchData(1)
+                    }
+                })
+            },
+            fetchData(pageNum = 1) {
+                if (pageNum < 1) pageNum = 1
+                if (pageNum >= this.pages) pageNum = this.pages
+
+                var that = this
+                axios.get('/userFollow/auth/list/' + pageNum + '/' + this.page.pageSize).then(function (response) {
+                    //如果没登录，拦截器会返回208状态，跳转登录页面
+                    if (response.data.code == 208) {
+                        window.location.href = 'login.html?originUrl=' + window.location.href
+                    } else {
+                        that.page = response.data.data
+                    }
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>
