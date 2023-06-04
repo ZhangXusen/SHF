@@ -42,5 +42,4 @@ shf-parent：根目录，管理子模块：
 
 
 模块调用关系，如图：
-
-![images/1.搭建环境/image-20220214132059749](images/1.搭建环境/image-20220214132059749.png)
+![image-20220214132059749](https://github.com/ZhangXusen/SHF/assets/37760186/7bf4c86c-bf65-484c-84d3-4c57232e6eb7)
